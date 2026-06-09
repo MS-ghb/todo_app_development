@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang = 'Ja'>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/style.css">
+    <title>ToDoリスト</title>
+  </head>
+  <body>
+    <h1>Todo</h1>
+    <h2>Todoリスト</h2>
+    <table border="1" style="border-collapse: collapse">
+      <tr>
+        <th>id</th>
+        <th>title</th>
+        <th>description</th>
+        <th>completed</th>
+        <th>created_at</th>
+        <th>updated_at</th>
+      </tr>
+      <% @todos.each do |todo| %>
+        <tr>
+          <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>"><%= todo.id %></td>
+          <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>"><%= todo.title %></td>
+          <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>"><%= todo.description %></td>
+          <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>">
+            <% if todo.completed ==1 || todo.completed == true %>
+              完了
+            <% else %>
+              未完了
+            <% end %>
+          </td> 
+          <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>"><%= todo.created_at %></td>
+          <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>"><%= todo.updated_at %></td>
+          <td>
+            <!-- 完了と未完了を切り替え -->
+            <form action="/<%= todo.id %>/toggle" method="post">
+              <input type="hidden" name="_method" value="patch">
+              <% if todo.completed == 1 || todo.completed == true %>
+                <input type="submit" value="未完了に変更">
+              <% else %>
+                <input type="submit" value="完了に変更">
+              <% end %>
+            </form>
+          </td>
+          <td>
+            <form>
+            <!-- 編集ボタンを押すと、各レコードのID専用のURLに飛ぶ -->
+              <input type="button" onclick="location.href='/<%= todo.id %>/edit'" value="編集">
+            </form>
+          </td>
+          <td>
+            <form action="/<%= todo.id %>" method="post">
+              <input type="hidden" name="_method" value="delete">
+              <input type="submit" value="削除" onclick="return confirm('本当に削除しますか？');">
+            </form>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+    <div class= "post-forms">
+      <h2>投稿用フォーム</h2>
+      <form action="/" method="post">
+        <input type="text" name="title" placeholder="タイトル">
+        <input type="text" name="description" placeholder="タスクの詳細">
+        <input type="submit" value="投稿">
+      </form>
+    </div>
+  </body>
+</html>
