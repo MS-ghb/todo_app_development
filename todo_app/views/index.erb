@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang = 'Ja'>
+<html lang='Ja'>
   <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/style.css">
@@ -23,8 +23,8 @@
           <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>"><%= todo.title %></td>
           <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>"><%= todo.description %></td>
           <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>">
-            <% if todo.completed ==1 || todo.completed == true %>
-              完了
+            <% if todo.completed == 1 || todo.completed == true %>
+              完了 
             <% else %>
               未完了
             <% end %>
@@ -64,6 +64,11 @@
         <input type="text" name="description" placeholder="タスクの詳細">
         <input type="submit" value="投稿">
       </form>
+    </div>
+    <div class= "filter">
+        <a href="/?filter=all">全件表示</a><br>
+        <a href="/?filter=active">未完了を表示</a><br>
+        <a href="/?filter=completed">完了を表示</a><br>
     </div>
   </body>
 </html>

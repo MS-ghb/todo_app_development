@@ -15,8 +15,23 @@ ActiveRecord.default_timezone = :local
 
 class Todo < ActiveRecord::Base; end
 
+#テーブル全体を表示（フィルタ設定をしたため、現在コメントアウト）
+# get '/' do
+#   @todos = Todo.all
+#   erb :index
+# end
+
+# フィルター　?filter=all/ ?filter=active/ ?filter=completed
+# ==は等しい、=はこの値にする
 get '/' do
-  @todos = Todo.all
+  @filter = params[:filter]
+  if @filter == 'active'
+    @todos = Todo.where(completed: 0)
+  elsif @filter == 'completed'
+    @todos = Todo.where(completed: 1)
+  else 
+    @todos = Todo.all
+  end
   erb :index
 end
 
@@ -50,7 +65,7 @@ end
 patch '/:id/toggle' do
 	@record = Todo.find_by_id(params[:id]) #該当IDのデータ情報取得
   # 現在の値が 1 または true なら 0 に更新、それ以外は 1 に更新
-  if @record.completed == 1 || @record.completed == true then
+  if @record.completed == 1 || @record.completed == true
     @record.completed = 0
   else
     @record.completed = 1
@@ -64,6 +79,7 @@ delete '/:id' do
     Todo.destroy(id)
     redirect '/'
 end
+
 
 
 
