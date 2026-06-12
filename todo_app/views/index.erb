@@ -19,23 +19,25 @@
       </tr>
       <% @todos.each do |todo| %>
         <tr>
-          <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>"><%= todo.id %></td>
-          <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>"><%= todo.title %></td>
-          <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>"><%= todo.description %></td>
-          <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>">
-            <% if todo.completed == 1 || todo.completed == true %>
+          <td class="<%= "strikeout" if todo.completed %>"><%= todo.id %></td> <!-- スペース10個 -->
+          <td class="<%= "strikeout" if todo.completed %>"><%= todo.title %></td>
+          <td class="<%= "strikeout" if todo.completed %>"><%= todo.description %></td>
+          <td class="<%= "strikeout" if todo.completed %>">
+            <% if todo.completed %> 
+              <!-- <%= todo.completed %> --> 
               完了 
             <% else %>
+              <!--<%= todo.completed %> -->
               未完了
             <% end %>
-          </td> 
-          <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>"><%= todo.created_at %></td>
-          <td class="<%= "strikeout" if todo.completed == 1  || todo.completed == true %>"><%= todo.updated_at %></td>
+          </td>
+          <td class="<%= "strikeout" if todo.completed %>"><%= todo.created_at %></td>
+          <td class="<%= "strikeout" if todo.completed %>"><%= todo.updated_at %></td>
           <td>
             <!-- 完了と未完了を切り替え -->
             <form action="/<%= todo.id %>/toggle" method="post">
               <input type="hidden" name="_method" value="patch">
-              <% if todo.completed == 1 || todo.completed == true %>
+              <% if todo.completed %>
                 <input type="submit" value="未完了に変更">
               <% else %>
                 <input type="submit" value="完了に変更">
@@ -44,7 +46,7 @@
           </td>
           <td>
             <form>
-            <!-- 編集ボタンを押すと、各レコードのID専用のURLに飛ぶ -->
+              <!-- 編集ボタンを押すと、各レコードのID専用のURLに飛ぶ -->
               <input type="button" onclick="location.href='/<%= todo.id %>/edit'" value="編集">
             </form>
           </td>
@@ -66,9 +68,9 @@
       </form>
     </div>
     <div class= "filter">
-        <a href="/?filter=all">全件表示</a><br>
-        <a href="/?filter=active">未完了を表示</a><br>
-        <a href="/?filter=completed">完了を表示</a><br>
+      <a href="/?filter=all">全件表示</a><br>
+      <a href="/?filter=active">未完了を表示</a><br>
+      <a href="/?filter=completed">完了を表示</a><br>
     </div>
   </body>
 </html>

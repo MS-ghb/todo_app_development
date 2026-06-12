@@ -4,11 +4,11 @@ require 'active_record'
 use Rack::MethodOverride
 
 ActiveRecord::Base.establish_connection(
-    adapter:  "mysql2",
-    host:     "localhost",
-    username: "root",          # Windowsの標準ユーザー名
-    password: "mysql2023", # 【重要】MySQLインストール時に決めたパスワードを入力
-    database: "todo_app_development"
+  adapter:  "mysql2",
+  host:     "localhost",
+  username: "root",          # Windowsの標準ユーザー名
+  password: "mysql2023", # 【重要】MySQLインストール時に決めたパスワードを入力
+  database: "todo_app_development"
 )
 #AcriveRecord タイムゾーン指定
 ActiveRecord.default_timezone = :local  
@@ -54,33 +54,28 @@ end
 
 # 編集画面での更新処理を反映
 patch '/:id' do
-	@record = Todo.find_by_id(params[:id]) #該当IDのデータ情報取得
+  @record = Todo.find_by_id(params[:id]) #該当IDのデータ情報取得
   #更新データの代入
-	@record.title = params[:title] 
+  @record.title = params[:title] 
   @record.description = params[:description]
-	@record.save #データ更新の反映
-	redirect to "/" #一覧画面へ
+  @record.save #データ更新の反映
+  redirect to "/" #一覧画面へ
 end
 # 完了・未完了切り替え（トグルボタン）
 patch '/:id/toggle' do
-	@record = Todo.find_by_id(params[:id]) #該当IDのデータ情報取得
+  @record = Todo.find(params[:id]) #該当IDのデータ情報取得
   # 現在の値が 1 または true なら 0 に更新、それ以外は 1 に更新
-  if @record.completed == 1 || @record.completed == true
+  if @record.completed
     @record.completed = 0
   else
     @record.completed = 1
   end
-	@record.save #データ更新の反映
-	redirect to "/" #一覧画面へ
+  @record.save #データ更新の反映
+  redirect to "/" #一覧画面へ
 end
 
 delete '/:id' do
   id = params[:id]
-    Todo.destroy(id)
-    redirect '/'
+  Todo.destroy(id)
+  redirect '/'
 end
-
-
-
-
-

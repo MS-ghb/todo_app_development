@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang = 'Ja'>
+<html lang='Ja'>
   <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/style.css">
@@ -17,21 +17,21 @@
         <th>updated_at</th>
       </tr>
       <tr>
-        <td><%= @record.id %></td>
-        <td><%= @record.title %></td>
-        <td><%= @record.description %></td>
-        <td>
-          <% if @record.completed == 1 then %>
+        <td class="<%= "strikeout" if @record.completed %>"><%= @record.id %></td>
+        <td class="<%= "strikeout" if @record.completed %>"><%= @record.title %></td>
+        <td class="<%= "strikeout" if @record.completed %>"><%= @record.description %></td>
+        <td class="<%= "strikeout" if @record.completed %>">
+          <% if @record.completed %>
             完了
           <% else %>
             未完了
           <% end %>
-        </td> 
-        <td><%= @record.created_at %></td>
-        <td><%= @record.updated_at %></td>
+        </td>
+        <td class="<%= "strikeout" if @record.completed %>"><%= @record.created_at %></td>
+        <td class="<%= "strikeout" if @record.completed %>"><%= @record.updated_at %></td>
       </tr>
     </table>
-    <div class= "post-forms">
+    <div class="post-forms">
       <h2>修正用フォーム</h2>
       <p>修正したいレコードのタイトル、タスクの説明を入力します。</p>
       <form action="/<%= @record.id %>" method="post">
