@@ -35,7 +35,13 @@ get '/' do
   erb :index
 end
 
-post '/' do
+# レコードの新規追加
+get '/todos' do
+  @todos = Todo.all
+  erb :index
+end
+
+post '/todos' do
   @newrecord = Todo.new
   @newrecord.title = params[:title]
   @newrecord.description = params[:description]
@@ -43,8 +49,8 @@ post '/' do
   @newrecord.completed = 0
   # saveでtodosテーブルに保存
   @newrecord.save   
-  # index画面（トップページ）へURLごと移動
-  redirect '/' 
+  # index画面（トップページ）へURLごと移動(最初のリクエストがPOSTであっても、リダイレクト先にはGETでリクエスト)
+  redirect '/todos'
 end
 
 get '/:id/edit' do
@@ -52,17 +58,23 @@ get '/:id/edit' do
   erb :edit # views/edit.erb を表示
 end
 
+get '/:id/update' do
+  @record = Todo.find(params[:id]) #該当IDのデータ取得
+  erb :edit # views/edit.erb を表示(リダイレクトせず、そのままの画面を表示)
+end
+
 # 編集画面での更新処理を反映
-patch '/:id' do
-  @record = Todo.find_by_id(params[:id]) #該当IDのデータ情報取得
+post '/:id/update' do
+  @record = Todo.find(params[:id]) #該当IDのデータ情報取得
   #更新データの代入
   @record.title = params[:title] 
   @record.description = params[:description]
   @record.save #データ更新の反映
-  redirect to "/" #一覧画面へ
+  erb :edit # views/edit.erb を表示(リダイレクトせず、そのままの画面を表示)
 end
+
 # 完了・未完了切り替え（トグルボタン）
-patch '/:id/toggle' do
+post '/:id/toggle' do
   @record = Todo.find(params[:id]) #該当IDのデータ情報取得
   # 現在の値が 1 または true なら 0 に更新、それ以外は 1 に更新
   if @record.completed
@@ -71,11 +83,20 @@ patch '/:id/toggle' do
     @record.completed = 1
   end
   @record.save #データ更新の反映
-  redirect to "/" #一覧画面へ
+  @todos = Todo.all #テーブル全体を表示
+  erb :index #一覧画面へ（リダイレクトなし）
 end
 
-delete '/:id' do
+# レコード削除
+get '/:id/delete' do
+  @todos = Todo.all
+  erb :index # views/edit.erb を表示
+end
+
+post '/:id/delete' do
   id = params[:id]
   Todo.destroy(id)
-  redirect '/'
+  # URLを/:id/deleteのまま、テーブルを全体表示(リダイレクトせず、index画面を表示)
+  @todos = Todo.all
+  erb :index
 end

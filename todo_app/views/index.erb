@@ -19,7 +19,7 @@
       </tr>
       <% @todos.each do |todo| %>
         <tr>
-          <td class="<%= "strikeout" if todo.completed %>"><%= todo.id %></td> <!-- スペース10個 -->
+          <td class="<%= "strikeout" if todo.completed %>"><%= todo.id %></td>
           <td class="<%= "strikeout" if todo.completed %>"><%= todo.title %></td>
           <td class="<%= "strikeout" if todo.completed %>"><%= todo.description %></td>
           <td class="<%= "strikeout" if todo.completed %>">
@@ -36,7 +36,6 @@
           <td>
             <!-- 完了と未完了を切り替え -->
             <form action="/<%= todo.id %>/toggle" method="post">
-              <input type="hidden" name="_method" value="patch">
               <% if todo.completed %>
                 <input type="submit" value="未完了に変更">
               <% else %>
@@ -51,8 +50,7 @@
             </form>
           </td>
           <td>
-            <form action="/<%= todo.id %>" method="post">
-              <input type="hidden" name="_method" value="delete">
+            <form action="/<%= todo.id %>/delete" method="post">
               <input type="submit" value="削除" onclick="return confirm('本当に削除しますか？');">
             </form>
           </td>
@@ -61,7 +59,7 @@
     </table>
     <div class= "post-forms">
       <h2>投稿用フォーム</h2>
-      <form action="/" method="post">
+      <form action="/todos" method="post">
         <input type="text" name="title" placeholder="タイトル">
         <input type="text" name="description" placeholder="タスクの詳細">
         <input type="submit" value="投稿">
