@@ -8,57 +8,61 @@
   <body>
     <h1>Todo</h1>
     <h2>Todoリスト</h2>
-    <table border="1" style="border-collapse: collapse">
+    <% if @todos.empty? %>
       <tr>
-        <th>id</th>
-        <th>title</th>
-        <th>description</th>
-        <th>completed</th>
-        <th>created_at</th>
-        <th>updated_at</th>
+        <td>タスクがありません。</td>
       </tr>
-      #idの連番がSinatra上で1～順番に並ぶようにする
-      <% @todos.each_with_index do |todo, index| %>
+    <% else %>
+      <table border="1" style="border-collapse: collapse">
         <tr>
-          <td class="<%= "strikeout" if todo.completed %>"><%= index + 1 %></td>
-          <td class="<%= "strikeout" if todo.completed %>"><%= todo.title %></td>
-          <td class="<%= "strikeout" if todo.completed %>"><%= todo.description %></td>
-          <td class="<%= "strikeout" if todo.completed %>">
-            <% if todo.completed %> 
-              <!-- <%= todo.completed %> --> 
-              完了 
-            <% else %>
-              <!--<%= todo.completed %> -->
-              未完了
-            <% end %>
-          </td>
-          <td class="<%= "strikeout" if todo.completed %>"><%= todo.created_at %></td>
-          <td class="<%= "strikeout" if todo.completed %>"><%= todo.updated_at %></td>
-          <td>
-            <!-- 完了と未完了を切り替え -->
-            <form action="/todos/<%= todo.id %>/toggle" method="post">
-              <% if todo.completed %>
-                <input type="submit" value="未完了に変更">
-              <% else %>
-                <input type="submit" value="完了に変更">
-              <% end %>
-            </form>
-          </td>
-          <td>
-            <form>
-              <!-- 編集ボタンを押すと、各レコードのID専用のURLに飛ぶ -->
-              <input type="button" onclick="location.href='/todos/<%= todo.id %>/edit'" value="編集">
-            </form>
-          </td>
-          <td>
-            <form action="/todos/<%= todo.id %>/delete" method="post">
-              <input type="submit" value="削除" onclick="return confirm('本当に削除しますか？');">
-            </form>
-          </td>
+          <th>id</th>
+          <th>title</th>
+          <th>description</th>
+          <th>completed</th>
+          <th>created_at</th>
+          <th>updated_at</th>
         </tr>
+        <% @todos.each_with_index do |todo, index| %>
+          <tr>
+            <td class="<%= "strikeout" if todo.completed %>"><%= index + 1 %></td>
+            <td class="<%= "strikeout" if todo.completed %>"><%= todo.title %></td>
+            <td class="<%= "strikeout" if todo.completed %>"><%= todo.description %></td>
+            <td class="<%= "strikeout" if todo.completed %>">
+              <% if todo.completed %> 
+                <!-- <%= todo.completed %> --> 
+                完了 
+              <% else %>
+                <!--<%= todo.completed %> -->
+                未完了
+              <% end %>
+            </td>
+            <td class="<%= "strikeout" if todo.completed %>"><%= todo.created_at %></td>
+            <td class="<%= "strikeout" if todo.completed %>"><%= todo.updated_at %></td>
+            <td>
+              <!-- 完了と未完了を切り替え -->
+              <form action="/todos/<%= todo.id %>/toggle" method="post">
+                <% if todo.completed %>
+                  <input type="submit" value="未完了に変更">
+                <% else %>
+                  <input type="submit" value="完了に変更">
+                <% end %>
+              </form>
+            </td>
+            <td>
+              <form>
+                <!-- 編集ボタンを押すと、各レコードのID専用のURLに飛ぶ -->
+                <input type="button" onclick="location.href='/todos/<%= todo.id %>/edit'" value="編集">
+              </form>
+            </td>
+            <td>
+              <form action="/todos/<%= todo.id %>/delete" method="post">
+                <input type="submit" value="削除" onclick="return confirm('本当に削除しますか？');">
+              </form>
+            </td>
+          </tr>
+        <% end %>
       <% end %>
-    </table>
-    
+    </table>   
     <!--エラーを表示するif文-->
     <!--@newrecord&.title→値がnil（なし）の場合にnilを返し、そうでない場合は値を表示-->
 
