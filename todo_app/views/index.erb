@@ -17,9 +17,10 @@
         <th>created_at</th>
         <th>updated_at</th>
       </tr>
-      <% @todos.each do |todo| %>
+      #idの連番がSinatra上で1～順番に並ぶようにする
+      <% @todos.each_with_index do |todo, index| %>
         <tr>
-          <td class="<%= "strikeout" if todo.completed %>"><%= todo.id %></td>
+          <td class="<%= "strikeout" if todo.completed %>"><%= index + 1 %></td>
           <td class="<%= "strikeout" if todo.completed %>"><%= todo.title %></td>
           <td class="<%= "strikeout" if todo.completed %>"><%= todo.description %></td>
           <td class="<%= "strikeout" if todo.completed %>">
@@ -35,7 +36,7 @@
           <td class="<%= "strikeout" if todo.completed %>"><%= todo.updated_at %></td>
           <td>
             <!-- 完了と未完了を切り替え -->
-            <form action="/<%= todo.id %>/toggle" method="post">
+            <form action="/todos/<%= todo.id %>/toggle" method="post">
               <% if todo.completed %>
                 <input type="submit" value="未完了に変更">
               <% else %>
@@ -46,22 +47,30 @@
           <td>
             <form>
               <!-- 編集ボタンを押すと、各レコードのID専用のURLに飛ぶ -->
-              <input type="button" onclick="location.href='/<%= todo.id %>/edit'" value="編集">
+              <input type="button" onclick="location.href='/todos/<%= todo.id %>/edit'" value="編集">
             </form>
           </td>
           <td>
-            <form action="/<%= todo.id %>/delete" method="post">
+            <form action="/todos/<%= todo.id %>/delete" method="post">
               <input type="submit" value="削除" onclick="return confirm('本当に削除しますか？');">
             </form>
           </td>
         </tr>
       <% end %>
     </table>
+    
+    <!--エラーを表示するif文-->
+    <!--@newrecord&.title→値がnil（なし）の場合にnilを返し、そうでない場合は値を表示-->
+
+    <% if @error %>
+      <p class="error-message">タイトルを入力してください。</p>
+    <% end %>
+
     <div class= "post-forms">
       <h2>投稿用フォーム</h2>
       <form action="/todos" method="post">
-        <input type="text" name="title" placeholder="タイトル">
-        <input type="text" name="description" placeholder="タスクの詳細">
+        <input type="text" name="title" placeholder="タイトル" value = "<%= @newrecord&.title %>">
+        <input type="text" name="description" placeholder="タスクの詳細" value = "<%= @newrecord&.description %>">
         <input type="submit" value="投稿">
       </form>
     </div>

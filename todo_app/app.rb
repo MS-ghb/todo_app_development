@@ -13,7 +13,19 @@ ActiveRecord::Base.establish_connection(
 #AcriveRecord タイムゾーン指定
 ActiveRecord.default_timezone = :local  
 
-class Todo < ActiveRecord::Base; end
+class Todo < ActiveRecord::Base; 
+# タイトルが空の場合にDB保存しないバリデーション  
+  validates :title, presence: true
+end
+
+# URLに「/todos/:id」が含まれるすべてのアクセスに対して、事前に実行
+# ?をつけるとメソッドがtrueかfalseで返るようになる
+before '/todos/:id/?*' do
+  @record = Todo.find_by(id: params[:id]) 
+  if @record.nil?
+    halt 404, "TODOリストにレコードがありません。"
+  end
+end
 
 #テーブル全体を表示（フィルタ設定をしたため、現在コメントアウト）
 # get '/' do
@@ -47,25 +59,31 @@ post '/todos' do
   @newrecord.description = params[:description]
   # completedの初期値は0(未完了)
   @newrecord.completed = 0
+
   # saveでtodosテーブルに保存
-  @newrecord.save   
+  if @newrecord.save   
   # index画面（トップページ）へURLごと移動(最初のリクエストがPOSTであっても、リダイレクト先にはGETでリクエスト)
-  redirect '/todos'
+    redirect '/todos'
+  else 
+    @error = "タイトルを入力してください。"
+    @todos = Todo.all
+    erb :index
+  end
 end
 
-get '/:id/edit' do
-  @record = Todo.find_by_id(params[:id]) #該当IDのデータ取得
+get '/todos/:id/edit' do
+  @record = Todo.find_by(id: params[:id]) #該当IDのデータ取得
   erb :edit # views/edit.erb を表示
 end
 
-get '/:id/update' do
-  @record = Todo.find(params[:id]) #該当IDのデータ取得
+get '/todos/:id/update' do
+  @record = Todo.find_by(id: params[:id]) #該当IDのデータ取得
   erb :edit # views/edit.erb を表示(リダイレクトせず、そのままの画面を表示)
 end
 
 # 編集画面での更新処理を反映
-post '/:id/update' do
-  @record = Todo.find(params[:id]) #該当IDのデータ情報取得
+post '/todos/:id/update' do
+  @record = Todo.find_by(id: params[:id]) #該当IDのデータ情報取得
   #更新データの代入
   @record.title = params[:title] 
   @record.description = params[:description]
@@ -74,8 +92,8 @@ post '/:id/update' do
 end
 
 # 完了・未完了切り替え（トグルボタン）
-post '/:id/toggle' do
-  @record = Todo.find(params[:id]) #該当IDのデータ情報取得
+post '/todos/:id/toggle' do
+  @record = Todo.find_by(id: params[:id]) #該当IDのデータ情報取得
   # 現在の値が 1 または true なら 0 に更新、それ以外は 1 に更新
   if @record.completed
     @record.completed = 0
@@ -88,12 +106,12 @@ post '/:id/toggle' do
 end
 
 # レコード削除
-get '/:id/delete' do
+get '/todos/:id/delete' do
   @todos = Todo.all
   erb :index # views/edit.erb を表示
 end
 
-post '/:id/delete' do
+post '/todos/:id/delete' do
   id = params[:id]
   Todo.destroy(id)
   # URLを/:id/deleteのまま、テーブルを全体表示(リダイレクトせず、index画面を表示)

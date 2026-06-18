@@ -34,4 +34,9 @@
   text-decoration: line-through;
   opacity: 0.3
 }
+/* エラー文のフォント設定 */
+.error-message {
+  color: #ff1493;
+  font-weight: bold;
+}
 
