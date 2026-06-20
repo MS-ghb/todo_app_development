@@ -14,7 +14,7 @@ ActiveRecord::Base.establish_connection(
 ActiveRecord.default_timezone = :local  
 
 class Todo < ActiveRecord::Base; 
-# タイトルが空の場合にDB保存しないバリデーション  
+  # タイトルが空の場合にDB保存しないバリデーション  
   validates :title, presence: true
 end
 
@@ -62,7 +62,7 @@ post '/todos' do
 
   # saveでtodosテーブルに保存
   if @newrecord.save   
-  # index画面（トップページ）へURLごと移動(最初のリクエストがPOSTであっても、リダイレクト先にはGETでリクエスト)
+    # index画面（トップページ）へURLごと移動(最初のリクエストがPOSTであっても、リダイレクト先にはGETでリクエスト)
     redirect '/todos'
   else 
     @error = "タイトルを入力してください。"
@@ -88,7 +88,7 @@ post '/todos/:id/update' do
   @record.title = params[:title] 
   @record.description = params[:description]
   @record.save #データ更新の反映
-  erb :edit # views/edit.erb を表示(リダイレクトせず、そのままの画面を表示)
+  redirect '/' #リダイレクトでトップ画面に戻る
 end
 
 # 完了・未完了切り替え（トグルボタン）
@@ -102,7 +102,7 @@ post '/todos/:id/toggle' do
   end
   @record.save #データ更新の反映
   @todos = Todo.all #テーブル全体を表示
-  erb :index #一覧画面へ（リダイレクトなし）
+  redirect '/'#一覧画面へ（リダイレクト）
 end
 
 # レコード削除
@@ -116,5 +116,5 @@ post '/todos/:id/delete' do
   Todo.destroy(id)
   # URLを/:id/deleteのまま、テーブルを全体表示(リダイレクトせず、index画面を表示)
   @todos = Todo.all
-  erb :index
+  redirect '/'#一覧画面へ（リダイレクト）
 end
