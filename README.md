@@ -1,6 +1,6 @@
 SinatraフレームワークとMySQLを使った、タスクの追加・編集・削除・完了管理ができるTodoアプリケーションです。　
 
-1.必要なGemのインストール方法　
+#1.必要なGemのインストール方法　
 
 
 1-1. todo_appファイル内に移動し、コマンドプロンプトを開きます。(右クリック→ターミナルで開く)
@@ -8,7 +8,7 @@ SinatraフレームワークとMySQLを使った、タスクの追加・編集�
 1-2. コマンド　bundle install　を実行します。　
 
 
-2.データベースの作成方法
+#2.データベースの作成方法
 
 
 2-1. MySQLにログインするため、コマンドプロンプトを開きます。
@@ -27,7 +27,7 @@ CREATE DATABASE todo_app_development;　
 SHOW DATABASES;　
 
 
-3.database.ymlの設定方法　
+#3.database.ymlの設定方法　
 
 
 本アプリケーションのデータベース接続設定は `config/database.yml` に記述されています。　
@@ -45,7 +45,7 @@ development:　
   <<: *default　
   database: todo_app_development　
 
-4.マイグレーションの実行方法　
+#4.マイグレーションの実行方法　
 
 
 4-1. データベースのテーブルを作成します。(todosテーブル)　
@@ -63,7 +63,7 @@ CREATE TABLE todos (　
 show tables;　
 
 
-5.アプリの起動方法とアクセスURL
+#5.アプリの起動方法とアクセスURL
 
    
 5-1.todo_appファイル内に移動し、コマンドプロンプトを開きます。(右クリック→ターミナルで開く)
