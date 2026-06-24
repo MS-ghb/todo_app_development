@@ -1,8 +1,6 @@
 require 'sinatra'
 require 'active_record'
 
-use Rack::MethodOverride
-
 ActiveRecord::Base.establish_connection(
   adapter:  "mysql2",
   host:     "localhost",
