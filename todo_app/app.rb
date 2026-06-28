@@ -104,11 +104,6 @@ post '/todos/:id/toggle' do
 end
 
 # レコード削除
-get '/todos/:id/delete' do
-  @todos = Todo.all
-  erb :index # views/edit.erb を表示
-end
-
 post '/todos/:id/delete' do
   id = params[:id]
   Todo.destroy(id)
